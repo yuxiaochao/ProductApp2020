@@ -1,17 +1,17 @@
-import { NavigationActions, StackActions } from 'react-navigation'
+import { CommonActions } from '@react-navigation/native';
 let _navigator
 
-function setTopLevelNavigator(navigatorRef) {
+function setTopLevelNavigator(navigatorRef:any) {
     _navigator = navigatorRef
 }
 
-function navigate(routeName, params) {
-    _navigator.dispatch(
-        NavigationActions.navigate({
-            routeName,
-            params
+function navigate(routeName:string, params:object) {
+    _navigation.dispatch(
+        CommonActions.navigate({
+            name: routeName,
+            params: params,
         })
-    )
+    );
 }
 
 function resetTo(routeName) {

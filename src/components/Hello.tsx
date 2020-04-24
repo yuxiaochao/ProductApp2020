@@ -1,21 +1,25 @@
 import React from 'react';
 import { Button, StyleSheet, Text, View } from 'react-native';
 import {useNavigation} from "@react-navigation/native";
+import {AuthContext} from "../app/ContextManager";
 
 export interface Props {
     name: string;
     enthusiasmLevel?: number;
 }
 
+//const {signIn} = React.useContext(AuthContext);
+//const navigation = useNavigation();
+
 const Hello: React.FC<Props> = props => {
     const [enthusiasmLevel, setEnthusiasmLevel] = React.useState(props.enthusiasmLevel);
+    const {signIn,signOut} = React.useContext(AuthContext);
     const navigation = useNavigation();
     const onIncrement = () => {
-        setEnthusiasmLevel((enthusiasmLevel || 0) + 1);
+        signOut();
     }
     const onDecrement = () => {
-        navigation.navigate('AuthStack')
-        setEnthusiasmLevel((enthusiasmLevel || 0) - 1);
+        navigation.navigate('App')
     }
 
     const getExclamationMarks = (numChars: number) => Array(numChars + 1).join('!');
@@ -27,11 +31,11 @@ const Hello: React.FC<Props> = props => {
 
             <View style={styles.buttons}>
                 <View style={styles.button}>
-                    <Button title="-" onPress={onDecrement} accessibilityLabel="decrement" color="red" />
+                    <Button title="navigation.navigate('App')" onPress={onDecrement} accessibilityLabel="decrement" color="red" />
                 </View>
 
                 <View style={styles.button}>
-                    <Button title="+" onPress={onIncrement} accessibilityLabel="increment" color="blue" />
+                    <Button title="signIn()" onPress={onIncrement} accessibilityLabel="increment" color="blue" />
                 </View>
             </View>
         </View>

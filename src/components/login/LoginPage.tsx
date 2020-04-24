@@ -14,8 +14,8 @@ import {
 
 import loginIcon from "../../assets/images/login/loginIcon.png";
 import {commonStyle} from "../../utils/CommonStyleUtils";
-import { useNavigation,useRoute,CommonActions,NavigationContainer,StackActions } from '@react-navigation/native';
-import App from "../../../App";
+import {useNavigation, useRoute, CommonActions, NavigationContainer, StackActions} from '@react-navigation/native';
+import {AuthContext} from "../../app/ContextManager";
 
 let {height} = Dimensions.get('window');
 
@@ -30,8 +30,8 @@ interface LoginProps {
     loginType?: LoginType,
     value1?: string,
     value2?: string,
-    navigation?:any,
-    signIn:Function
+    navigation?: any,
+    signIn: Function
 }
 
 const LoginPage: React.FC<LoginProps> = props => {
@@ -41,9 +41,8 @@ const LoginPage: React.FC<LoginProps> = props => {
     const [loginType, setLoginType] = React.useState(LoginType.USERANDPHONE);
     const route = useRoute();
     const navigation = useNavigation();
+    //const {signIn} = React.useContext(AuthContext);
 
-    let a :LoginProps = {signIn:()=>{}};
-    const AuthContext = App.
     const submit = () => {
         // if(Utils.isNotEmpty(username)&&Utils.isNotEmpty(password)){
         //     login.userInfo(username, password, defaultValue).then(userInfo=>{
@@ -65,8 +64,10 @@ const LoginPage: React.FC<LoginProps> = props => {
         //         name: 'App',
         //     })
         // )
-        const { signIn } = React.useContext(AuthContext);
-        signIn('123')
+        debugger
+        //navigation.navigate('AppStack')
+        // signIn();
+        navigation.navigate('Hello')
     }
 
 
@@ -76,21 +77,26 @@ const LoginPage: React.FC<LoginProps> = props => {
             <ScrollView keyboardShouldPersistTaps={"handled"} style={{flex: 1}}>
                 <StatusBar hidden={true}/>
                 <KeyboardAvoidingView enabled behavior="position">
-                    <View style={{...styles.bgImgBox,flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                        <View style={{marginVertical:20}}>
-                            <Image resizeMode={'contain'} source={loginIcon} style={{height:80,width:80}}/>
+                    <View style={{
+                        ...styles.bgImgBox,
+                        flexDirection: 'column',
+                        justifyContent: 'flex-start',
+                        alignItems: 'flex-start'
+                    }}>
+                        <View style={{marginVertical: 20}}>
+                            <Image resizeMode={'contain'} source={loginIcon} style={{height: 80, width: 80}}/>
                         </View>
                         <View>
-                            <Text style={{fontSize:40,fontWeight:'bold'}}>您好，</Text>
+                            <Text style={{fontSize: 40, fontWeight: 'bold'}}>您好，</Text>
                         </View>
-                        <View style={{marginTop:18}}>
-                            <Text style={{fontSize:15,color: '#999', fontFamily: "ping-fang"}}>欢迎来到药师在线</Text>
+                        <View style={{marginTop: 18}}>
+                            <Text style={{fontSize: 15, color: '#999', fontFamily: "ping-fang"}}>欢迎来到药师在线</Text>
                         </View>
                     </View>
 
                     <View style={{marginHorizontal: 30}}>
-                        <View style={{...styles.inputBox,justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                            <View style={{...styles.IconBox,justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{...styles.inputBox, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                            <View style={{...styles.IconBox, justifyContent: 'center', alignItems: 'center'}}>
                                 {/*<Icon name={'user'} size={20} color="#999"/>*/}
                             </View>
                             <View style={styles.boxLine}/>
@@ -103,7 +109,7 @@ const LoginPage: React.FC<LoginProps> = props => {
                             >
                             </TextInput>
 
-                            <View style={{...styles.IconBox,justifyContent: 'center', alignItems: 'center'}}>
+                            <View style={{...styles.IconBox, justifyContent: 'center', alignItems: 'center'}}>
                                 <TouchableOpacity onPress={() => {
                                     setValue1('')
                                     setValue2('')
@@ -113,8 +119,8 @@ const LoginPage: React.FC<LoginProps> = props => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={{...styles.inputBox,justifyContent: 'flex-start', alignItems: 'flex-start'}}>
-                            <View style={{...styles.IconBox,justifyContent: 'center', alignItems: 'center'}}>
+                        <View style={{...styles.inputBox, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                            <View style={{...styles.IconBox, justifyContent: 'center', alignItems: 'center'}}>
                                 {/*<SimpleLineIcons name={'lock'} size={18} color="#999"/>*/}
                             </View>
                             <View style={styles.boxLine}/>
@@ -131,9 +137,6 @@ const LoginPage: React.FC<LoginProps> = props => {
                         </View>
 
                         <TouchableOpacity onPress={() => {
-                            props.navigation.navigate('ForgetPasswordPage', {
-                                isHeader: true
-                            });
                         }}>
                             <Text style={styles.cardFooter}>忘记密码</Text>
                         </TouchableOpacity>
@@ -152,19 +155,16 @@ const LoginPage: React.FC<LoginProps> = props => {
                     </View>
                 </KeyboardAvoidingView>
             </ScrollView>
-            <View style={{paddingBottom: 30,justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+            <View style={{paddingBottom: 30, justifyContent: 'flex-start', alignItems: 'flex-start'}}>
                 <Text style={{color: '#999', ...styles.fontFamilyStyle}}>还没有账号？</Text>
                 <TouchableOpacity onPress={() => {
-                    props.navigation.navigate('RegisterPage', {
-                        isHeader: true
-                    })
                 }}>
                     <Text style={{color: commonStyle.themeColor, ...styles.fontFamilyStyle}}>立即注册</Text>
                 </TouchableOpacity>
             </View>
-            <View style={{marginHorizontal:120,marginBottom:40}}>
-                <Text>服务条款  |</Text>
-                <Text>  隐私政策</Text>
+            <View style={{marginHorizontal: 120, marginBottom: 40}}>
+                <Text>服务条款 |</Text>
+                <Text> 隐私政策</Text>
             </View>
         </View>
     );
@@ -177,7 +177,7 @@ const styles = StyleSheet.create({
     bgImgBox: {
         height: height / 4,
         marginHorizontal: 30,
-        marginBottom:60
+        marginBottom: 60
     },
     bgImg: {
         height: '80%',

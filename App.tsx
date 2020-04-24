@@ -1,28 +1,25 @@
-import React, {createContext, useEffect, useMemo} from 'react';
-import {AsyncStorage, Dimensions, Image, Platform, Text, View} from 'react-native';
+import React, {createContext, useEffect, useMemo, useState} from 'react';
+import {AsyncStorage, Button, Dimensions, Image, Platform, Text, View, YellowBox} from 'react-native';
 import {AppLoading, SplashScreen} from 'expo';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import {Asset} from 'expo-asset';
 import * as Font from "expo-font";
-import { enableScreens } from 'react-native-screens';
-//import './fixtimerbug';
+import {enableScreens} from 'react-native-screens';
 import {NavigationContainer} from "@react-navigation/native";
 import {Orientation, WebOrientationLock} from "expo-screen-orientation/src/ScreenOrientation.types";
 import {loadingFont, loadingPath} from "./loadingConfig";
 import AuthStack from "./src/app/route/AuthRoute";
 import AppStack from "./src/app/AppRoute";
+import {AuthContext} from "./src/app/ContextManager";
+//import './fixtimerbug';
+YellowBox.ignoreWarnings(['Require cycle:', 'Warning: Async Storage']);
 
 enableScreens();
 
 let {width} = Dimensions.get('window');
 
-export interface Props {
+const App: React.FC<any> = props => {
 
-}
-
-const App: React.FC<Props> = props => {
-
-    const AuthContext = createContext(props);
     const [state, dispatch] = React.useReducer(
         (prevState: any, action: { type: any; token: any; }) => {
             switch (action.type) {
@@ -56,15 +53,15 @@ const App: React.FC<Props> = props => {
 
     useEffect(() => {
         SplashScreen.preventAutoHide(); //指示SplashScreen尚未隐藏
-        if(Platform.OS !== 'web'){
+        if (Platform.OS !== 'web') {
             ScreenOrientation.lockPlatformAsync({
                 screenOrientationConstantAndroid: -1,
                 screenOrientationArrayIOS: [Orientation.PORTRAIT_UP],
-                screenOrientationLockWeb: WebOrientationLock.PORTRAIT_PRIMARY ,
-            }).catch((err)=>{
+                screenOrientationLockWeb: WebOrientationLock.PORTRAIT_PRIMARY,
+            }).catch((err) => {
                 console.log(err)
             })
-            ScreenOrientation.getPlatformOrientationLockAsync().then((r)=>{
+            ScreenOrientation.getPlatformOrientationLockAsync().then((r) => {
                 console.log(r)
             });
         }
@@ -90,25 +87,15 @@ const App: React.FC<Props> = props => {
         });
     }, []);
 
-    const authContext = useMemo(
+    const authContext = React.useMemo(
         () => ({
-            signIn: async (data: any) => {
+            signIn: () => {
                 debugger
-                //在生产应用中，我们需要向服务器发送一些数据（通常是用户名，密码）并获得令牌
-                //如果登录失败，我们还将需要处理错误
-                //获得令牌后，我们需要使用`AsyncStorage`来保留令牌
-                //在示例中，我们将使用虚拟令牌
-
-                dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+                dispatch({ type: 'SIGN_IN', token: 'dummy-auth-token' })
             },
-            signOut: (data: any) => dispatch({type: 'SIGN_OUT', token: 'dummy-auth-token'}),
-            signUp: async (data: any) => {
-                //在生产应用中，我们需要将用户数据发送到服务器并获得令牌
-                //如果注册失败，我们还将需要处理错误
-                //获得令牌后，我们需要使用`AsyncStorage`来保留令牌
-                //在示例中，我们将使用虚拟令牌
-
-                dispatch({type: 'SIGN_IN', token: 'dummy-auth-token'});
+            signOut: () => {
+                debugger
+                dispatch({ type: 'SIGN_OUT', token: null})
             },
         }),
         []
